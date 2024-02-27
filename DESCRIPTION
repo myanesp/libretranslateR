@@ -1,13 +1,13 @@
 Package: libretranslateR
-Title: What the Package Does (One Line, Title Case)
-Version: 1.0
+Title: Connect to LibreTranslate API from R
+Version: 0.2
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+    person("Mario", "Yanes", , "mario.yanes@uc3m.es", role = c("aut", "cre"),
+           comment = c(ORCID = "0009-0001-0079-6921"))
+Description: Binding to LibreTranslate API for R: translate, detect languages, obtain the available languages to translate from and to, enhanced with a user-friendly wizard process.
 License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-Imports: dplyr, httr2, rjson, magrittr
-Depends: dplyr, httr2, rjson, magrittr
+Imports: dplyr, httr2
+Depends: dplyr, httr2
