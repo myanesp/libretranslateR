@@ -39,13 +39,13 @@ translate <- function(q, from = "auto", to) {
     stop("There is no instance set. Please, run the `set_config()` command to configure one.")
   }
 
-  req <- request(Sys.getenv("lt_inst")) %>%
-    req_url_path("translate") %>%
-    req_body_json(data, type = "application/json") %>%
-    req_perform()
+  req <- httr2::request(Sys.getenv("lt_inst")) |>
+    httr2::req_url_path("translate") |>
+    httr2::req_body_json(data, type = "application/json") |>
+    httr2::req_perform()
 
-  response <- req %>%
-    resp_body_json()
+  response <- req |>
+    httr2::resp_body_json()
 
   translation <- response$translatedText
 
@@ -82,13 +82,13 @@ detect_language <- function(str) {
     stop("There is no instance set. Please, run the `set_config()` command to configure one.")
   }
 
-  req <- request(Sys.getenv("lt_inst")) %>%
-    req_url_path_append("detect") %>%
-    req_body_json(data, type = "application/json") %>%
-    req_perform()
+  req <- httr2::request(Sys.getenv("lt_inst")) |>
+    httr2::req_url_path_append("detect") |>
+    httr2::req_body_json(data, type = "application/json") |>
+    httr2::req_perform()
 
-  response <- req %>%
-    resp_body_json()
+  response <- req |>
+    httr2::resp_body_json()
 
   confidence <- response[[1]]$confidence
   language <- response[[1]]$language
@@ -112,39 +112,39 @@ get_languages <- function() {
 
   if (nzchar(Sys.getenv("lt_inst"))) {
     if (!nzchar(Sys.getenv("api_lt"))) {
-      req <- request(Sys.getenv("lt_inst")) %>%
-        req_url_path_append("languages") %>%
-        req_perform()
+      req <- httr2::request(Sys.getenv("lt_inst")) |>
+        httr2::req_url_path_append("languages") |>
+        httr2::req_perform()
 
-      response <- req %>%
-        resp_body_json()
+      response <- req |>
+        httr2::resp_body_json()
 
       languages <- lapply(response, function(element) {
         list(code = element$code, name = element$name)
       })
 
-      lang <- toJSON(languages, auto_unbox = TRUE)
+      lang <- rjson::toJSON(languages, auto_unbox = TRUE)
 
       return(cat(paste0("These are the available languages in your configured instance: ", "\n",
-                        toJSON(languages, pretty = TRUE), collapse = "\n")))
+                        rjson::toJSON(languages, pretty = TRUE), collapse = "\n")))
 
     } else if (nzchar(Sys.getenv("api_lt"))) {
-      req <- request(Sys.getenv("lt_inst")) %>%
-        req_url_path_append("languages") %>%
-        req_url_query(api_key = Sys.getenv("api_lt")) %>%
-        req_perform()
+      req <- httr2::request(Sys.getenv("lt_inst")) |>
+        httr2::req_url_path_append("languages") |>
+        httr2::req_url_query(api_key = Sys.getenv("api_lt")) |>
+        httr2::req_perform()
 
-      response <- req %>%
-        resp_body_json()
+      response <- req |>
+        httr2::resp_body_json()
 
       languages <- lapply(response, function(element) {
         list(code = element$code, name = element$name)
       })
 
-      lang <- toJSON(languages, auto_unbox = TRUE)
+      lang <- rjson::toJSON(languages, auto_unbox = TRUE)
 
       return(cat(paste0("These are the available languages in your configured instance: ", "\n",
-                        toJSON(languages, pretty = TRUE), collapse = "\n")))
+                        rjson::toJSON(languages, pretty = TRUE), collapse = "\n")))
     }
   } else if (!nzchar(Sys.getenv("lt_inst"))) {
     stop("There is no instance set. Please, run the `set_config()` command to configure one.")

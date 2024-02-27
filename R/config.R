@@ -17,7 +17,7 @@ set_config <- function() {
 
   message("Let's start by selecting an instance.")
 
-  select_instance <- menu(
+  select_instance <- utils::menu(
     choices = c(
       "Official instance (libretranslate.com), paid and needed API",
       "I want to specify a custom one"
@@ -34,68 +34,63 @@ set_config <- function() {
 
     api_key <- readline("Please, paste here your API key here, without spaces: ")
 
+    regex_api <- "^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$"
 
-    if (check_api == 1) {
+    if (!grepl(regex_api, api_key)) {
+      stop("The API key does not contain the valid format.")
+    }
 
-      regex_api <- "^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$"
+    data <- list(
+      q = "Hello",
+      source = "en",
+      target = "es",
+      format = "text",
+      api_key = api_key
+    )
 
-      if (!grepl(regex_api, api_key)) {
-        stop("The API key does not contain the valid format.")
-      }
+    req <- httr2::request(Sys.getenv("lt_inst")) |>
+      httr2::req_url_path_append("translate") |>
+      httr2::req_body_json(data, type = "application/json") |>
+      httr2::req_perform()
 
-      data <- list(
-        q = "Hello",
-        source = "en",
-        target = "es",
-        format = "text",
-        api_key = api_key
+    if (req$status_code == 200) {
+      Sys.setenv(lt_api = api_key)
+      message("Successfully configured LibreTranslate instance. Let's translate!")
+
+      message("Would you like to export your credentials (instance and API key) to a
+              json file that can be exported in a new session with `import_config()` without
+              having to run this config wizard again?")
+
+      json_utils <- utils::menu(
+        choices = c(
+          "Yes! Of course",
+          "No, thank you :)"
+        )
       )
 
-      req <- request(Sys.getenv("lt_inst")) %>%
-        req_url_path_append("translate") %>%
-        req_body_json(data, type = "application/json") %>%
-        req_perform()
-
-      if (req$status_code == 200) {
-        Sys.setenv(lt_api = api_key)
-        message("Successfully configured LibreTranslate instance. Let's translate!")
-
-        message("Would you like to export your credentials (instance and API key) to a
-                json file that can be exported in a new session with `import_config()` without
-                having to run this config wizard again?")
-
-        json_menu <- menu(
-          choices = c(
-            "Yes! Of course",
-            "No, thank you :)"
-          )
+      if (json_utils == 1) {
+        config_list <- list(
+          instance = Sys.getenv("lt_inst"),
+          api_key = Sys.getenv("lt_api")
         )
 
-        if (json_menu == 1) {
-          config_list <- list(
-            instance = Sys.getenv("lt_inst"),
-            api_key = Sys.getenv("lt_api")
-          )
+        config_json <- rjson::toJSON(config_list)
 
-          config_json <- toJSON(config_list)
+        file_name <- readline("Please, provide a filename for your configuration: ")
 
-          file_name <- readline("Please, provide a filename for your configuration: ")
-
-          if (!grepl("\\.json$", file_name)) {
-            write(config_json, paste0(file_name, ".json"))
-          } else if (grepl("\\.json$", file_name)){
-            write(config_json, file_name)
-          }
-
-        } else {
-          message("All set. Let's translate!")
+        if (!grepl("\\.json$", file_name)) {
+          write(config_json, paste0(file_name, ".json"))
+        } else if (grepl("\\.json$", file_name)) {
+          write(config_json, file_name)
         }
 
       } else {
-        stop("There is an error while setting the instance. Please, check the URL and the parameters.")
+        message("All set. Let's translate!")
       }
-    }
 
+    } else {
+      stop("There is an error while setting the instance. Please, check the URL and the parameters.")
+    }
   } else if (select_instance == 2) {
 
     custom_url <- readline("Please, type the URL, including the protocol (http/https): ")
@@ -115,15 +110,14 @@ set_config <- function() {
     }
 
     Sys.setenv("lt_inst" = custom_url)
-
   }
 
-  message("Does this instance requires an API key in order to use the API?")
-  api_needed <- menu(
+  message("Does this instance require an API key in order to use the API?")
+  api_needed <- utils::menu(
     choices = c(
       "Yes",
       "No",
-      "I don't know what the hell are you talking about"
+      "I don't know what the hell you're talking about"
     )
   )
 
@@ -144,24 +138,82 @@ set_config <- function() {
       format = "text",
       api_key = api_key
     )
-    try({
-      req <- request(inst) %>%
-        req_url_path_append("translate") %>%
-        req_body_json(data, type = "application/json") %>%
-        req_perform()
 
-      if (req$status_code == 200) {
-        Sys.setenv(lt_inst = inst)
-        Sys.setenv(lt_api = api_key)
-        message("Successfully configured instance. Let's translate!")
+    req <- httr2::request(Sys.getenv("lt_inst")) |>
+      httr2::req_url_path_append("translate") |>
+      httr2::req_body_json(data, type = "application/json") |>
+      httr2::req_perform()
+
+    if (req$status_code == 200) {
+      Sys.setenv(lt_api = api_key)
+      message("Successfully configured instance. Let's translate!")
+
+      message("Would you like to export your credentials (instance and API key) to a
+              json file that can be exported in a new session with `import_config()` without
+              having to run this config wizard again?")
+
+      json_utils <- utils::menu(
+        choices = c(
+          "Yes! Of course",
+          "No, thank you :)"
+        )
+      )
+
+      if (json_utils == 1) {
+        config_list <- list(
+          instance = Sys.getenv("lt_inst"),
+          api_key = Sys.getenv("lt_api")
+        )
+
+        config_json <- rjson::toJSON(config_list)
+
+        file_name <- readline("Please, provide a filename for your configuration: ")
+
+        if (!grepl("\\.json$", file_name)) {
+          write(config_json, paste0(file_name, ".json"))
+        } else if (grepl("\\.json$", file_name)) {
+          write(config_json, file_name)
+        }
+
       } else {
-        stop("There is an error while setting your instance. Please, check the URL and the parameters.")
+        message("All set. Let's translate!")
       }
-    }, error = function(e) {
+    } else {
       stop("There is an error while setting your instance. Please, check the URL and the parameters.")
-    })
+    }
 
   } else if (api_needed == 2) {
+
+    message("Would you like to export your credentials (instance and API key) to a
+              json file that can be exported in a new session with `import_config()` without
+              having to run this config wizard again?")
+
+    json_utils <- utils::menu(
+      choices = c(
+        "Yes! Of course",
+        "No, thank you :)"
+      )
+    )
+
+    if (json_utils == 1) {
+      config_list <- list(
+        instance = Sys.getenv("lt_inst"),
+        api_key = Sys.getenv("lt_api")
+      )
+
+      config_json <- rjson::toJSON(config_list)
+
+      file_name <- readline("Please, provide a filename for your configuration: ")
+
+      if (!grepl("\\.json$", file_name)) {
+        write(config_json, paste0(file_name, ".json"))
+      } else if (grepl("\\.json$", file_name)) {
+        write(config_json, file_name)
+      }
+
+    } else {
+      message("All set. Let's translate!")
+    }
 
     message("Fantastic, the instance has been successfully configured. Let's translate!")
 
@@ -176,6 +228,7 @@ set_config <- function() {
   }
 
 }
+
 
 
 #' Import configuration for an instance for a file
@@ -196,7 +249,7 @@ import_config <- function(file) {
     stop("File must be a .json")
   }
 
-  instance_config <- fromJSON(file)
+  instance_config <- rjson::fromJSON(file)
 
   if (!is.null(instance_config[["instance"]])) {
     inst <- instance_config$instance
@@ -214,25 +267,25 @@ import_config <- function(file) {
     }
 
     data <- list(
-      q = q,
-      source = from,
-      target = to,
+      q = "hola",
+      source = "es",
+      target = "en",
       format = "text",
       api_key = api_key
     )} else if (is.null(instance_config[["api_key"]])) {
       data <- list(
-        q = q,
-        source = from,
-        target = to,
+        q = "hola",
+        source = "es",
+        target = "en",
         format = "text",
         api_key = ""
       )
     }
 
-  req <- request(inst) %>%
-    req_url_path("translate") %>%
-    req_body_json(data, type = "application/json") %>%
-    req_perform()
+  req <- httr2::request(inst) |>
+    httr2::req_url_path("translate") |>
+    httr2::req_body_json(data, type = "application/json") |>
+    httr2::req_perform()
 
   if (req$status_code == 200) {
     Sys.setenv(lt_inst = inst)
