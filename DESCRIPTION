@@ -4,9 +4,9 @@ Version: 0.2
 Authors@R: 
     person("Mario", "Yanes", , "mario.yanes@uc3m.es", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0001-0079-6921"))
-Description: Binding to LibreTranslate API for R: translate, detect languages, obtain the available languages to translate from and to, enhanced with a user-friendly wizard process.
+Description: Binding to LibreTranslate API for R: translate, detect languages and obtain the available languages to translate from and to, enhanced with a user-friendly wizard process.
 License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
-Imports: dplyr, httr2
+RoxygenNote: 7.3.1
+Imports: httr2, rjson
