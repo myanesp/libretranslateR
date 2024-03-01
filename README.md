@@ -3,7 +3,6 @@
 <!-- badges: start -->
 
 [![CodeFactor](https://www.codefactor.io/repository/github/myanesp/libretranslateR/badge)](https://www.codefactor.io/repository/github/myanesp/libretranslateR) [![](https://img.shields.io/github/languages/code-size/myanesp/libretranslateR.svg)](https://github.com/myanesp/libretranslateR) [![](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental) [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![](https://badgen.net/badge/icon/github?icon=github&label)](https://github.com/myanesp/libretranslateR)
 ![](https://badgen.net/github/stars/myanesp/libretranslateR?icon=github&label=stars)
 ![Github last-commit](https://img.shields.io/github/last-commit/myanesp/libretranslateR)
 ![Github license](https://badgen.net/github/license/myanesp/libretranslateR)
@@ -11,7 +10,7 @@
 
 ## Connect to LibreTranslate API from R
 
-[API Docs](https://libretranslate.com/docs) | [Official instance](https://libretranslate.com) | [List of instances](https://github.com/LibreTranslate/LibreTranslate?tab=readme-ov-file#mirrors)
+[API Docs](https://libretranslate.com/docs) | [LibreTranslate GitHub Repository](https://github.com/LibreTranslate/LibreTranslate) | [Official instance](https://libretranslate.com) | [List of instances](https://github.com/LibreTranslate/LibreTranslate?tab=readme-ov-file#mirrors)
 
 ### Features
 - Translate texts, strings of R objects without leaving R using an opensource engine.
