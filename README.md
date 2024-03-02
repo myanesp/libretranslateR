@@ -20,7 +20,7 @@
 
 ### Installation
 This package is not yet available on CRAN. So you must install from GitHub using `remotes` package.
-```
+```r
 if (!require("remotes")) install.packages("remotes")
 remotes::install_github("myanesp/libretranslateR")
 # And then load into your current session
@@ -28,7 +28,7 @@ library(libretranslateR)
 ```
 
 ### Examples and usage
-```
+```r
 set_config() # Config wizard for setting the instance you're going to use and your API key
 
 translate(q = "hola, amigos", to = "en") # Autodetect language
