@@ -18,6 +18,15 @@
 - It can connect to any LibreTranslate instance, so you're not tied to anything, even you can host your own!
 - As you can install your LibreTranslate instance, offline translation is available
 
+### Installation
+This package is not yet available on CRAN. So you must install from GitHub using `remotes` package.
+```
+if (!require("remotes")) install.packages("remotes")
+remotes::install_github("myanesp/libretranslateR")
+# And then load into your current session
+library(libretranslateR)
+```
+
 ### Examples and usage
 ```
 set_config() # Config wizard for setting the instance you're going to use and your API key
