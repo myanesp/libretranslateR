@@ -1,6 +1,6 @@
 Package: libretranslateR
 Title: Connect to LibreTranslate API from R
-Version: 0.2
+Version: 0.3
 Authors@R: 
     person("Mario", "Yanes", , "mario.yanes@uc3m.es", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0001-0079-6921"))
@@ -9,4 +9,4 @@ License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
-Imports: httr2, rjson
+Imports: httr2, rjson, curl
