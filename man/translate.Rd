@@ -14,8 +14,8 @@ translate(q, from = "auto", to)
 \item{to}{The destination language you want the string to be translated to.}
 }
 \description{
-Request as many details as you want (revenue, cast, original language, ...)
-from media and add them to an existing dataframe.
+Use this function to translate strings, from regular text
+to entire dataframes.
 }
 \examples{
 \dontrun{

@@ -1,7 +1,7 @@
 #' Translate strings using LibreTranslate selected instance
 #'
-#' Request as many details as you want (revenue, cast, original language, ...)
-#' from media and add them to an existing dataframe.
+#' Use this function to translate strings, from regular text
+#' to entire dataframes.
 #'
 #' @param q The string you want to translate
 #' @param from The origin language of the text. If you leave it empty, it will be set to "auto".
@@ -52,6 +52,69 @@ translate <- function(q, from = "auto", to) {
   return(translation)
 }
 
+#' Translate files using LibreTranslate selected instance
+#'
+#' With this function, you can translate an external file.
+#' Supported formats are .txt, .odt, .odp, .docx, .pptx, .epub and .html
+#'
+#' @param file The path to the file you want to translate (absolute or relative).
+#' @param from The origin language of the text. If you leave it empty, it will be set to "auto".
+#' @param to The destination language you want the text to be translated to.
+#' @export
+#' @examples
+#' \dontrun{
+#' translate_file <- function(file, from = "auto", to)
+#' }
+
+translate_file <- function(file, from = "auto", to) {
+
+  extension <- "\\.(txt|odt|odp|docx|pptx|epub|html)$"
+
+  translated_file <- sub("(\\.[a-zA-Z0-9]+)$", paste0("-", to, "\\1"), file)
+
+  if (grepl(extension, file, ignore.case = TRUE)) {
+  } else {
+    stop("The file does not have a valid extension. Only .txt, .odt, .odp,
+    .docx, .pptx, .epub, .html are allowed")
+  }
+
+  if (nzchar(Sys.getenv("lt_inst"))) {
+
+    if (!nzchar(Sys.getenv("api_lt"))) {
+
+      req <- httr2::request(Sys.getenv("lt_inst")) |>
+        httr2::req_url_path("translate_file") |>
+        httr2::req_body_multipart(file = curl::form_file(file), source = "es", target = "en", api_key = "") |>
+        httr2::req_perform()
+
+      response <- req |>
+        httr2::resp_body_json()
+
+      utils::download.file(response$translatedFileUrl, destfile = translated_file)
+
+      message(paste0("File download correctly in ", translated_file))
+
+    } else if (nzchar(Sys.getenv("api_lt"))) {
+
+      req <- httr2::request(Sys.getenv("lt_inst")) |>
+        httr2::req_url_path("translate_file") |>
+        httr2::req_body_multipart(file = curl::form_file(file), source = "es", target = "en", api_key = Sys.getenv("api_lt")) |>
+        httr2::req_perform()
+
+      response <- req |>
+        httr2::resp_body_json()
+
+      utils::download.file(response$translatedFileUrl, destfile = translated_file)
+
+      message(paste0("File download correctly in ", translated_file))
+
+    }
+  }
+
+  if (!nzchar(Sys.getenv("lt_inst"))) {
+    stop("There is no instance set. Please, run the `set_config()` command to configure one.")
+  }
+}
 
 #' Automatically detect the language of a given string
 #'
