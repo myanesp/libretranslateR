@@ -8,12 +8,12 @@
 ## Citation
 
 Yanes M (2026). *libretranslateR: Connect to LibreTranslate API from R*.
-R package version 0.3, <http://me.marioyanes.es/libretranslateR/>.
+R package version 0.3.1, <http://me.marioyanes.es/libretranslateR/>.
 
     @Manual{,
       title = {libretranslateR: Connect to LibreTranslate API from R},
       author = {Mario Yanes},
       year = {2026},
-      note = {R package version 0.3},
+      note = {R package version 0.3.1},
       url = {http://me.marioyanes.es/libretranslateR/},
     }
