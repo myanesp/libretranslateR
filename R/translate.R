@@ -186,10 +186,13 @@ get_languages <- function() {
         list(code = element$code, name = element$name)
       })
 
-      lang <- rjson::toJSON(languages, auto_unbox = TRUE)
+      codes <- sapply(languages, function(x) x$code)
+      names <- sapply(languages, function(x) x$name)
+      df <- data.frame(code = codes, name = names, stringsAsFactors = FALSE)
 
-      return(cat(paste0("These are the available languages in your configured instance: ", "\n",
-                        rjson::toJSON(languages, pretty = TRUE), collapse = "\n")))
+      message(cat(paste0("These are the available languages in your configured instance: ", "\n")))
+      print(df)
+
 
     } else if (nzchar(Sys.getenv("api_lt"))) {
       req <- httr2::request(Sys.getenv("lt_inst")) |>
@@ -204,10 +207,12 @@ get_languages <- function() {
         list(code = element$code, name = element$name)
       })
 
-      lang <- rjson::toJSON(languages, auto_unbox = TRUE)
+      codes <- sapply(languages, function(x) x$code)
+      names <- sapply(languages, function(x) x$name)
+      df <- data.frame(code = codes, name = names, stringsAsFactors = FALSE)
 
-      return(cat(paste0("These are the available languages in your configured instance: ", "\n",
-                        rjson::toJSON(languages, pretty = TRUE), collapse = "\n")))
+      message(cat(paste0("These are the available languages in your configured instance: ", "\n")))
+      print(df)
     }
   } else if (!nzchar(Sys.getenv("lt_inst"))) {
     stop("There is no instance set. Please, run the `set_config()` command to configure one.")
