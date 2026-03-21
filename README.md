@@ -51,6 +51,6 @@ You can follow the [official instructions located at LibreTranslate's repository
 ### Planned features
 
 -   [x] Support for translating files
--   [ ] Transform ISO names in `get_languages()` to real user-friendly names
+-   [x] Transform ISO names in `get_languages()` to real user-friendly names
 -   [ ] Automatically detect if the chosen instance needs API or not
 -   [ ] Rework and rethink config process
